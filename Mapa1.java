@@ -21,11 +21,13 @@ public class Mapa1 extends JFrame{
         BufferedImage map1;
         BufferedImage princess;
         BufferedImage mario;
+        BufferedImage kong;
         Imagens(){
             try{
                 map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/spritesm1.png"));
                 princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
                 mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
+                kong = javax.imageio.ImageIO.read(new java.io.File("sprites/d1.png"));
             }catch(java.io.IOException e){
                 e.printStackTrace();
             }    
@@ -35,5 +37,6 @@ public class Mapa1 extends JFrame{
         g.drawImage(map1, 0, 0, 550, 450, null);
         g.drawImage(princess, 240,32, 50,50, null);
         g.drawImage(mario, 90, 400, 30, 30, null);
+        g.drawImage(kong, 80, 35, 100, 100, null);
     }
 }
