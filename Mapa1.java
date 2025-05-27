@@ -7,11 +7,12 @@ import java.awt.image.BufferedImage;
 public class Mapa1 extends JFrame{
    Mapa1(){
     JFrame frame = new JFrame(); 
-    frame.setSize(572,468);    
+    frame.setSize(560,480);    
     frame.add(new Imagens());
+    frame.setResizable(false);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);
-   }
+}
     public static void main(String[] args){
         new Mapa1();
 }
@@ -31,8 +32,8 @@ public class Mapa1 extends JFrame{
     }
     protected void paintComponent(Graphics g){
         super.paintComponents(g);
-        g.drawImage(map1, 0, 0, 560, 440, null);
+        g.drawImage(map1, 0, 0, 550, 450, null);
         g.drawImage(princess, 240,32, 50,50, null);
-        g.drawImage(mario, 90, 390, 30, 30, null);
+        g.drawImage(mario, 90, 400, 30, 30, null);
     }
 }
