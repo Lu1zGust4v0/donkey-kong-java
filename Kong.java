@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +7,6 @@ import javax.imageio.ImageIO;
 
 public class Kong {
     int x, y;
-    Kong(){
         Image[] sprites = new Image[5];
         try {
             sprites[0] = ImageIO.read(new File("sprites/d1.png"));
@@ -17,5 +17,18 @@ public class Kong {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    protected void paintComponent(Graphics g){
+        super.paintComponents(g);
+        int i =0;
+        while(true){
+            try{
+                   Thread.sleep(1000);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            g.drawImage(sprites[i], 80, 35,100,100,null);
+            i++;
+            }
+}
 }
