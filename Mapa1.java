@@ -51,8 +51,10 @@ public class Mapa1 extends JFrame {
         g.drawImage(map1, 0, 0, 550, 450,null);
         g.drawImage(princess, 240,32, 50,50, null);
         g.drawImage(mario, 90, 400, 30, 30, null);
-        g.drawImage(sprites[i], 50, 35,100,100,null);
-
+        if(i!=3)
+            g.drawImage(sprites[i], 50, 35,100,100,null);
+        else
+            g.drawImage(sprites[i], 50, 50,100,100,null);
     }
     public void run() {
                 while(true){
