@@ -1,5 +1,4 @@
 import java.awt.*;
-import javax.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 
@@ -31,4 +30,6 @@ public class Mario{
         sprites[2][0] = ImageIO.read(new File("sprites/m6.png"));
         sprites[2][1] = ImageIO.read(new File("sprites/m7.png"));
     }
+
+    
 }
