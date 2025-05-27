@@ -21,8 +21,8 @@ public class Mapa1 extends JFrame{
         BufferedImage princess;
         Imagens(){
             try{
-                map1 = javax.imageio.ImageIO.read(new java.io.File("spritesm1.png"));
-                princess = javax.imageio.ImageIO.read(new java.io.File("princesa.png"));
+                map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/spritesm1.png"));
+                princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
             }catch(java.io.IOException e){
                 e.printStackTrace();
             }    
@@ -30,6 +30,6 @@ public class Mapa1 extends JFrame{
     protected void paintComponent(Graphics g){
         super.paintComponents(g);
         g.drawImage(map1, 0, 0, 560, 440, null);
-        g.drawImage(princess, 240,14, 80,80, null);
+        g.drawImage(princess, 240,32, 50,50, null);
     }
 }
