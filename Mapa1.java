@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 public class Mapa1 extends JFrame{
    Mapa1(){
     JFrame frame = new JFrame(); 
-    frame.setSize(572,468);
+    frame.setSize(572,468);    
     frame.add(new Imagens());
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);
@@ -19,10 +19,12 @@ public class Mapa1 extends JFrame{
     class Imagens extends JPanel{
         BufferedImage map1;
         BufferedImage princess;
+        BufferedImage mario;
         Imagens(){
             try{
                 map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/spritesm1.png"));
                 princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
+                mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
             }catch(java.io.IOException e){
                 e.printStackTrace();
             }    
@@ -31,5 +33,6 @@ public class Mapa1 extends JFrame{
         super.paintComponents(g);
         g.drawImage(map1, 0, 0, 560, 440, null);
         g.drawImage(princess, 240,32, 50,50, null);
+        g.drawImage(mario, 90, 390, 30, 30, null);
     }
 }
