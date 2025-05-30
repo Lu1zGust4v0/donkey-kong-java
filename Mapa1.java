@@ -24,6 +24,7 @@ public class Mapa1 extends JFrame {
         BufferedImage princess;
         BufferedImage mario;
         BufferedImage kong;
+        BufferedImage barril;
         int i =0;
         
         Image[] sprites = new Image[5];
@@ -32,6 +33,8 @@ public class Mapa1 extends JFrame {
                 map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/spritesm1.png"));
                 princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
                 mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
+                barril = javax.imageio.ImageIO.read(new java.io.File("sprites/b1.png"));
+                new Thread(this).start();
                 new Thread(this).start();
             }catch(java.io.IOException e){
                 e.printStackTrace();
@@ -51,6 +54,7 @@ public class Mapa1 extends JFrame {
         g.drawImage(map1, 0, 0, 550, 450,null);
         g.drawImage(princess, 240,32, 50,50, null);
         g.drawImage(mario, 90, 400, 30, 30, null);
+        g.drawImage(barril, 9, 400, 30, 30, null);
         if(i!=3)
             g.drawImage(sprites[i], 50, 35,100,100,null);
         else
