@@ -24,11 +24,14 @@ public class Mapa1 extends JFrame {
         BufferedImage princess;
         BufferedImage mario;
         BufferedImage kong;
-        int i = 0, j = 0;
-        int dx = 148, dy = 105;
+        int i = 0, j = 0, nivelPlataforma = 0;;
+        boolean direita = true, caindo = false;
+        double dx = 148.00, dy = 105.00;
+        double[] alturasPlataformas = {157, 215, 277, 338, 395};
         
         Image[] sprites = new Image[5];
         Image[] barril = new Image[2];
+
         Imagens(){
             try{
                 map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/spritesm1.png"));
@@ -49,6 +52,59 @@ public class Mapa1 extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }    
+
+        new Thread(() -> {
+        while (true) {
+            j+=1;
+
+            if(caindo){
+                dy += 4;
+                if(nivelPlataforma % 2 == 0){
+                    dx += 1;
+                    if(dy >= alturasPlataformas[nivelPlataforma]){
+                        caindo = false;
+                        nivelPlataforma++;
+                    }
+                }
+                else{
+                    dx -= 1;
+                    if(dy >= alturasPlataformas[nivelPlataforma]){
+                        caindo = false;
+                        nivelPlataforma++;
+                    }
+                }
+ 
+            }
+            else{
+                if(direita){
+                    dx+=5;
+                    dy+=0.2;
+                    if(dx > 495 && dx < 505){
+                        direita = false;
+                        caindo= true;
+                    }
+                }
+                else{
+                    dx-=5;
+                    dy+=0.2;
+                    if(dx > 30 && dx < 35){
+                        direita = true;
+                        caindo = true;
+                    }
+                }
+            }
+            
+            repaint();
+            if(j==2)
+                j = 0;
+            try {
+                Thread.sleep(50);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        }).start();
+
     }
     protected void paintComponent(Graphics g){
         super.paintComponents(g);
@@ -59,19 +115,14 @@ public class Mapa1 extends JFrame {
             g.drawImage(sprites[i], 50, 35,100,100,null);
         else
             g.drawImage(sprites[i], 50, 50,100,100,null);
-        g.drawImage(barril[j], dx, dy, 25, 25, null);
+        g.drawImage(barril[j], (int) dx, (int) dy, 25, 25, null);
     }
     public void run() {
                 while(true){
                     i+=1;
-                    j+=1;
-                    dx+=5;
-                    dy+=1;
                     repaint();
                     if(i==5)
                         i=0;
-                    if(j==2)
-                        j = 0;
                     try{
                         Thread.sleep(1000);
                     }
