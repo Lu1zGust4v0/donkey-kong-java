@@ -109,7 +109,7 @@ public class Mapa1 extends JFrame {
     protected void paintComponent(Graphics g){
         super.paintComponents(g);
         g.drawImage(map1, 0, 0, 550, 450,null);
-        g.drawImage(princess, 240,32, 50,50, null);
+        g.drawImage(princess, 240,33, 50,50, null);
         g.drawImage(mario, 90, 400, 30, 30, null);
         if(i!=3)
             g.drawImage(sprites[i], 50, 35,100,100,null);
