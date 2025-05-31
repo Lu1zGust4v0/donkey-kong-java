@@ -1,10 +1,14 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
 import java.lang.Thread;
+import java.net.URL;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -12,7 +16,8 @@ import java.util.ArrayList;
 public class Mapa1 extends JFrame implements MouseListener {
     private JPanel inicio;
     private JPanel imagens;
-
+    Sound sound = new Sound();
+    Thread gameThread;
     public Mapa1() {
         setSize(560, 480);
         setResizable(false);
@@ -22,7 +27,7 @@ public class Mapa1 extends JFrame implements MouseListener {
         inicio = new Inicio(); // painel inicial com a imagem e botões
         inicio.addMouseListener(this);
         add(inicio);
-
+        playMusic(0);
         setVisible(true);
     }
 
@@ -39,13 +44,14 @@ public class Mapa1 extends JFrame implements MouseListener {
             System.exit(0);
         } else if (playArea.contains(x, y)) {
             remove(inicio);
+            stopMusic();
             imagens = new Imagens();
             add(imagens);
+            playMusic(1);
             imagens.repaint();
             revalidate();
         }
     }
-
     // Métodos obrigatórios do MouseListener (vazios)
     @Override public void mousePressed(MouseEvent e) {}
     @Override public void mouseReleased(MouseEvent e) {}
@@ -55,8 +61,22 @@ public class Mapa1 extends JFrame implements MouseListener {
     public static void main(String[] args) {
         new Mapa1();
     }
-}
 
+    
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();   
+    }
+
+    public void stopMusic(){
+        sound.stop();
+    }
+    public void playSE(int i){
+        sound.setFile(i);
+        sound.play();
+    }
+}
 class Inicio extends JPanel{
     BufferedImage inicio;
 
@@ -223,4 +243,29 @@ class Barril {
         g.drawImage(imagens[j], (int) dx, (int) dy, 25, 25, null);
     }
 }
+class Sound{
+        Clip clip;
+        URL soundURL[] = new URL[30];
+        Sound(){
+            soundURL[0] = getClass().getResource("/sound/menu.wav");
+            soundURL[1] = getClass().getResource("/sound/mapa1.wav");
+        }
+        void setFile(int i){
+            try{
+                AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
+                clip = AudioSystem.getClip();
+                clip.open(ais);
+            }catch(Exception e){
 
+            }
+        }
+        void play(){
+            clip.start();
+        }
+        void loop(){
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+        void stop(){
+            clip.stop();
+        }
+}
