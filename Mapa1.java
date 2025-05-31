@@ -5,19 +5,70 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
 import java.lang.Thread;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class Mapa1 extends JFrame {
-   Mapa1(){ 
-    JFrame frame = new JFrame(); 
-    frame.setSize(560,480);    
-    frame.add(new Imagens());
-    frame.setResizable(false);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setVisible(true);
-}
-    public static void main(String[] args){
+public class Mapa1 extends JFrame implements MouseListener {
+    private JPanel inicio;
+    private JPanel imagens;
+
+    public Mapa1() {
+        setSize(560, 480);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // centraliza a janela
+
+        inicio = new Inicio(); // painel inicial com a imagem e botões
+        inicio.addMouseListener(this);
+        add(inicio);
+
+        setVisible(true);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+
+        // Ajuste as coordenadas conforme a posição dos botões no painel Inicio
+        Rectangle playArea = new Rectangle(213, 240, 120, 20);
+        Rectangle exitArea = new Rectangle(213, 285, 120, 20);
+
+        if (exitArea.contains(x, y)) {
+            System.exit(0);
+        } else if (playArea.contains(x, y)) {
+            remove(inicio);
+            imagens = new Imagens();
+            add(imagens);
+            imagens.repaint();
+            revalidate();
+        }
+    }
+
+    // Métodos obrigatórios do MouseListener (vazios)
+    @Override public void mousePressed(MouseEvent e) {}
+    @Override public void mouseReleased(MouseEvent e) {}
+    @Override public void mouseEntered(MouseEvent e) {}
+    @Override public void mouseExited(MouseEvent e) {}
+
+    public static void main(String[] args) {
         new Mapa1();
+    }
 }
+
+class Inicio extends JPanel{
+    BufferedImage inicio;
+    Inicio(){
+        try{
+            inicio = javax.imageio.ImageIO.read(new java.io.File("sprites/inicial.png"));
+        }catch(java.io.IOException e ){
+            e.printStackTrace();
+        }
+    }
+    protected void paintComponent(Graphics g){
+        super.paintComponents(g);
+        g.drawImage(inicio, 0, 0, 550, 450,null);
+    }
 }
     class Imagens extends JPanel implements Runnable{
         BufferedImage map1;
@@ -34,7 +85,7 @@ public class Mapa1 extends JFrame {
 
         Imagens(){
             try{
-                map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/spritesm1.png"));
+                map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/mapa1.png"));
                 princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
                 mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
                 new Thread(this).start();
