@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.File;
 import java.lang.Thread;
 import java.net.URL;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -48,7 +50,6 @@ public class Mapa1 extends JFrame implements MouseListener {
             remove(inicio);
             stopMusic();
             imagens = new Imagens();
-            
             add(imagens);
             playMusic(1);
             imagens.repaint();
@@ -120,18 +121,24 @@ class Imagens extends JPanel implements Runnable{
             map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/mapa1.png"));
             princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
             mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
-            jumpMan = new Mario(90, 375);
             
+            jumpMan = new Mario(90, 390);
+            setLayout(null);
+            jumpMan.setBounds(jumpMan.x, jumpMan.y, 30,30);
+            add(jumpMan);
+            jumpMan.requestFocusInWindow();
+            
+            SwingUtilities.invokeLater(() -> jumpMan.requestFocusInWindow());
             new Thread(()->{
                 while (true) {
+                    jumpMan.movimentos();
+                    repaint();
                     try {
-                        jumpMan.movimentos();
-                        Thread.sleep(60);
-                    } catch (Exception e) {
-                        
-                    }
+                        Thread.sleep(2000);
+                    } catch (Exception e) {}
                 }
             }).start();
+
             new Thread(this).start();
         }catch(java.io.IOException e){
             e.printStackTrace();
@@ -163,9 +170,6 @@ class Imagens extends JPanel implements Runnable{
             }
         }
     }).start();
-    jumpMan.grabFocus();
-    jumpMan.requestFocusInWindow();
-    jumpMan.requestFocusInWindow();
 
 }
 
@@ -173,7 +177,6 @@ protected void paintComponent(Graphics g){
     super.paintComponents(g);
     g.drawImage(map1, 0, 0, 550, 450,null);
     g.drawImage(princess, 240,33, 50,50, null);
-    jumpMan.paintComponent(g);
 
     if(i!=3)
         g.drawImage(sprites[i], 50, 35,100,100,null);

@@ -16,7 +16,7 @@ public class Mario extends JPanel implements KeyListener{
     int x, y, direcao, frame;
     BufferedImage[][] sprites;
     BufferedImage[] morte;
-    static final int VELOCIDADE = 7;
+    static final int VELOCIDADE = 2;
 
     boolean[] teclas = new boolean[256];
 
@@ -24,7 +24,7 @@ public class Mario extends JPanel implements KeyListener{
         setFocusable(true);
         setBackground(null);
         this.x = x;
-        setSize(30, 30);
+        setSize(90, 90);
         this.y = y;
         frame = 0;
         try {
@@ -61,9 +61,10 @@ public class Mario extends JPanel implements KeyListener{
             frame++;
             if (frame > 1) frame = 0;
         }
-        
+
+        setBounds(x, y, getWidth(), getHeight());
         repaint();
-        
+
     }
 
     @Override
