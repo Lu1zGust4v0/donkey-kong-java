@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Mapa1 extends JFrame implements MouseListener {
     private JPanel inicio;
     private JPanel imagens;
+    private Mario jumpMan;
     Sound sound = new Sound();
     Thread gameThread;
     public Mapa1() {
@@ -23,10 +24,11 @@ public class Mapa1 extends JFrame implements MouseListener {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // centraliza a janela
-
+        
         inicio = new Inicio(); // painel inicial com a imagem e botões
         inicio.addMouseListener(this);
         add(inicio);
+        
         playMusic(0);
         setVisible(true);
     }
@@ -46,6 +48,7 @@ public class Mapa1 extends JFrame implements MouseListener {
             remove(inicio);
             stopMusic();
             imagens = new Imagens();
+            
             add(imagens);
             playMusic(1);
             imagens.repaint();
@@ -60,6 +63,7 @@ public class Mapa1 extends JFrame implements MouseListener {
 
     public static void main(String[] args) {
         new Mapa1();
+        
     }
 
     
@@ -99,6 +103,7 @@ class Imagens extends JPanel implements Runnable{
     BufferedImage princess;
     BufferedImage mario;
     BufferedImage kong;
+    Mario jumpMan;
     
     int i = 0, j = 0, nivelPlataforma = 0;;
     boolean direita = true, caindo = false;
@@ -108,13 +113,25 @@ class Imagens extends JPanel implements Runnable{
     Image[] sprites = new Image[5];
     Image[] barril = new Image[2];
     ArrayList<Barril> barris = new ArrayList<>();
+    
 
     Imagens(){
         try{
             map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/mapa1.png"));
             princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
             mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
+            jumpMan = new Mario(90, 375);
             
+            new Thread(()->{
+                while (true) {
+                    try {
+                        jumpMan.movimentos();
+                        Thread.sleep(60);
+                    } catch (Exception e) {
+                        
+                    }
+                }
+            }).start();
             new Thread(this).start();
         }catch(java.io.IOException e){
             e.printStackTrace();
@@ -146,13 +163,17 @@ class Imagens extends JPanel implements Runnable{
             }
         }
     }).start();
+    jumpMan.grabFocus();
+    jumpMan.requestFocusInWindow();
+    jumpMan.requestFocusInWindow();
+
 }
 
 protected void paintComponent(Graphics g){
     super.paintComponents(g);
     g.drawImage(map1, 0, 0, 550, 450,null);
     g.drawImage(princess, 240,33, 50,50, null);
-    g.drawImage(mario, 90, 400, 30, 30, null);
+    jumpMan.paintComponent(g);
 
     if(i!=3)
         g.drawImage(sprites[i], 50, 35,100,100,null);
