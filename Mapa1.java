@@ -14,6 +14,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Mapa1 extends JFrame implements MouseListener {
     private JPanel inicio;
@@ -262,26 +264,58 @@ public void run() {
 
 class Barril {
     double dx, dy;
-    int j = 0;
+    int j = 0, e = 0;
     boolean direita;
     boolean caindo;
+    boolean descendoEscada;
+    boolean decidiuDescerEscada = false;
+    boolean vaiDescerEscada = false;
     int nivelPlataforma;
     double[] alturasPlataformas;
     Image[] imagens;
+    static Map<Integer, double[]> escadasPorNivel = new HashMap<>();
+    static {
+        escadasPorNivel.put(0, new double[] {225, 444});
+        escadasPorNivel.put(1, new double[] {388, 194, 84});
+        escadasPorNivel.put(2, new double[] {169, 251, 444});
+        escadasPorNivel.put(3, new double[] {224, 85});
+        escadasPorNivel.put(4, new double[] {196, 444});
+    }
 
     Barril(double dx, double dy, boolean direita, double[] alturasPlataformas, Image[] imagens) {
         this.dx = dx;
         this.dy = dy;
         this.direita = direita;
         this.caindo = false;
+        this.descendoEscada = false;
         this.nivelPlataforma = 0;
         this.alturasPlataformas = alturasPlataformas;
         this.imagens = imagens;
     }
 
     void atualizar() {
-        j = (j + 1) % 4;
+        //if(!descerEscada())
+            j = (j + 1) % 4;
+        //else
+            //e = (e + 1) % 2;
 
+        if (descendoEscada) {
+            dy += 4;
+            if (nivelPlataforma < alturasPlataformas.length && dy >= alturasPlataformas[nivelPlataforma]) {
+                descendoEscada = false;
+                decidiuDescerEscada = false;
+                vaiDescerEscada = false;
+
+                if (nivelPlataforma % 2 == 0) {
+                    direita = false;
+                } else {
+                    direita = true;
+                }
+
+                nivelPlataforma++;
+            }
+            return;
+        }
         if (caindo) {
             dy += 5;
             if (nivelPlataforma % 2 == 0) {
@@ -293,7 +327,7 @@ class Barril {
                 caindo = false;
                 nivelPlataforma++;
             }
-        } else {
+        } else{
             if (direita) {
                 dx += 5;
                 dy += 0.15;
@@ -310,10 +344,37 @@ class Barril {
                 }
             }
         }
+
+        if (descerEscada()) {
+            if (!decidiuDescerEscada) {
+                decidiuDescerEscada = true;
+                vaiDescerEscada = Math.random() < 0.5;
+            }
+            if (vaiDescerEscada) {
+                descendoEscada = true;
+                return;
+            }
+        } else {
+            decidiuDescerEscada = false;
+        }
+        
+    }
+
+    boolean descerEscada() {
+        double[] escadas = escadasPorNivel.getOrDefault(nivelPlataforma, new double[0]);
+        for (double escadaX : escadas) {
+            if (Math.abs(dx - escadaX) < 3) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void desenhar(Graphics g) {
-        g.drawImage(imagens[j], (int) dx, (int) dy, 25, 25, null);
+        if(!descerEscada())
+            g.drawImage(imagens[j], (int) dx, (int) dy, 25, 25, null);
+        else
+            g.drawImage(imagens[j], (int) dx, (int) dy, 25, 25, null);
     }
 }
 class Sound{
