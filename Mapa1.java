@@ -112,7 +112,7 @@ class Imagens extends JPanel implements Runnable{
     double[] alturasPlataformas = {157, 215, 277, 338, 395};
     
     Image[] sprites = new Image[5];
-    Image[] barril = new Image[2];
+    Image[] barril = new Image[4];
     ArrayList<Barril> barris = new ArrayList<>();
     Image[] fogo = new Image[2];
     Image[] barrilAzul = new Image[2];
@@ -150,8 +150,10 @@ class Imagens extends JPanel implements Runnable{
         sprites[2] = ImageIO.read(new File("sprites/d3.png"));
         sprites[3] = ImageIO.read(new File("sprites/d5.png"));
         sprites[4] = ImageIO.read(new File("sprites/d6.png"));
-        barril[0] = ImageIO.read(new File("sprites/b1__2_-removebg-preview.png"));
-        barril[1] = ImageIO.read(new File("sprites/b2-removebg-preview.png"));
+        barril[0] = ImageIO.read(new File("sprites/barril1.png"));
+        barril[1] = ImageIO.read(new File("sprites/barril2.png"));
+        barril[2] = ImageIO.read(new File("sprites/barril3.png"));
+        barril[3] = ImageIO.read(new File("sprites/barril4.png"));
         fogo[0] = ImageIO.read(new File("sprites/fogo1_preview.png"));
         fogo[1] = ImageIO.read(new File("sprites/fogo2_preview.png"));
         barrilAzul[0] = ImageIO.read(new File("sprites/barril_azul_1.png"));
@@ -278,7 +280,7 @@ class Barril {
     }
 
     void atualizar() {
-        j = (j + 1) % 2;
+        j = (j + 1) % 4;
 
         if (caindo) {
             dy += 5;
