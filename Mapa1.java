@@ -106,15 +106,16 @@ class Imagens extends JPanel implements Runnable{
     BufferedImage kong;
     Mario jumpMan;
     
-    int i = 0, j = 0, nivelPlataforma = 0;;
-    boolean direita = true, caindo = false;
-    double dx = 148.00, dy = 105.00;
+    int i = 0, j = 0, nivelPlataforma = 0, q = 0, a = 0;
+    boolean direita = true, caindo = false, primeiravez = true, mostraBarrilAzul = false;
+    double dx = 148.00, dy = 105.00, dy_azul = 120.00, dx_azul = 90.00;
     double[] alturasPlataformas = {157, 215, 277, 338, 395};
     
     Image[] sprites = new Image[5];
     Image[] barril = new Image[2];
     ArrayList<Barril> barris = new ArrayList<>();
-    
+    Image[] fogo = new Image[2];
+    Image[] barrilAzul = new Image[2];
 
     Imagens(){
         try{
@@ -151,14 +152,57 @@ class Imagens extends JPanel implements Runnable{
         sprites[4] = ImageIO.read(new File("sprites/d6.png"));
         barril[0] = ImageIO.read(new File("sprites/b1__2_-removebg-preview.png"));
         barril[1] = ImageIO.read(new File("sprites/b2-removebg-preview.png"));
+        fogo[0] = ImageIO.read(new File("sprites/fogo1_preview.png"));
+        fogo[1] = ImageIO.read(new File("sprites/fogo2_preview.png"));
+        barrilAzul[0] = ImageIO.read(new File("sprites/barril_azul_1.png"));
+        barrilAzul[1] = ImageIO.read(new File("sprites/barril_azul_2.png"));
     } catch (IOException e) {
         e.printStackTrace();
-    }    
+    }   
+    
+    new Thread(() -> {
+        while (true) {
+            q += 1;
+            repaint();
+            if(q==2)
+                q=0;
+            try {
+                Thread.sleep(80);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }).start();
+
+    Thread barril_Azul = new Thread(() -> {
+        while (true) {
+            a+=1;
+            dy_azul+=5.00;
+            repaint();
+            if(dy_azul>410){
+                mostraBarrilAzul = false;
+                break;
+            }
+            if(a==2)
+                a=0;
+            try {
+                Thread.sleep(50);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
 
     new Thread(() -> {
         while (true) {
             i += 1;
             repaint();
+            if(primeiravez && i == 3){
+                mostraBarrilAzul = true;
+                barril_Azul.start();
+                i = 0;
+                primeiravez = false;
+            }
             if(i==4)
                 barris.add(new Barril(dx, dy, direita, alturasPlataformas, barril));
             if(i==5)
@@ -170,7 +214,7 @@ class Imagens extends JPanel implements Runnable{
             }
         }
     }).start();
-
+    
 }
 
 protected void paintComponent(Graphics g){
@@ -183,9 +227,12 @@ protected void paintComponent(Graphics g){
     else
         g.drawImage(sprites[i], 50, 50,100,100,null);
 
-    for (Barril b : barris) {
+    for (Barril b : barris) 
         b.desenhar(g);
-    }
+
+    g.drawImage(fogo[q], 43, 368, 43, 30, null);
+    if(mostraBarrilAzul)
+        g.drawImage(barrilAzul[a], (int) dx_azul, (int) dy_azul, 25, 25, null);
 }
 
 public void run() {
