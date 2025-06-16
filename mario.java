@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,10 +17,12 @@ public class Mario extends JPanel implements KeyListener{
     public static final int ESCADA = 2;
     public static final int MORRENDO = 4;
     
-    ArrayList<Ponto> pontosDesnivel = new ArrayList<Ponto>();
+    ArrayList<Integer> pontosDesnivel = new ArrayList<Integer>();
+
 
     Ponto p;
-    int direcao, frame, chao = 400;
+    boolean pulando = false;
+    int direcao, frame, chao = 410, nivel = 0, alturaPulo = 28, gravidade = 7;
     BufferedImage[][] sprites;
     BufferedImage[] morte;
     static final int VELOCIDADE = 2;
@@ -54,14 +57,40 @@ public class Mario extends JPanel implements KeyListener{
         g.drawImage(sprites[direcao][frame], p.x1, p.x2, 60, 60, null);
     }
 
-    public void addArray(ArrayList<Ponto> desniveis){
-        desniveis.add(new Ponto(256, 410));
-        desniveis.add(new Ponto(312, 408));
-        desniveis.add(new Ponto(366, 406));
-        desniveis.add(new Ponto(422, 404));
-        desniveis.add(new Ponto(478, 402));
+    public void addArray(ArrayList<Integer> desniveis){
+        desniveis.clear();
+        if (nivel == 0){
+            desniveis.add(256);
+            desniveis.add(312);
+            desniveis.add(366);
+            desniveis.add(422);
+            desniveis.add(478);
+        }
+        else if (nivel == 1 || nivel == 3){
+            desniveis.add(444);
+            desniveis.add(388);
+            desniveis.add(332);
+            desniveis.add(278);
+            desniveis.add(222);
+            desniveis.add(166);
+            desniveis.add(112);
+            desniveis.add(56);
+        }
+        else if (nivel == 2 || nivel == 4){
+            desniveis.add(90);
+            desniveis.add(144);
+            desniveis.add(200);
+            desniveis.add(256);
+            desniveis.add(310);
+            desniveis.add(366);
+            desniveis.add(424);
+            desniveis.add(478);
+        }
+        else if (nivel == 5){
+            desniveis.add(276);
+            desniveis.add(388);
+        }
     }
-
     public void movimentos(){
         if (teclas[KeyEvent.VK_LEFT]) {
             p.x1 -= VELOCIDADE;
@@ -83,22 +112,91 @@ public class Mario extends JPanel implements KeyListener{
         if (teclas[KeyEvent.VK_UP]){
             p.x2 -= VELOCIDADE;
         }
-
-        if (teclas[KeyEvent.VK_SPACE]){
-
+        
+        if (p.x2 >= 376){
+            nivel = 0;
+            addArray(pontosDesnivel);
         }
+        else if (p.x2 >= 320 && p.x2 < 376) {
+            nivel = 1;
+            addArray(pontosDesnivel);
+        }
+        else if (p.x2 >= 262 && p.x2 < 320) {
+            nivel = 2;
+            addArray(pontosDesnivel);
+        }
+        else if (p.x2 >= 200 && p.x2 < 262) {
+            nivel = 3;
+            addArray(pontosDesnivel);
+        }
+        else if (p.x2 >= 140 && p.x2 < 200) {
+            nivel = 4;
+            addArray(pontosDesnivel);
+        }
+        else if (p.x2 >= 88 && p.x2 < 140) {
+            nivel = 5;
+            addArray(pontosDesnivel);
+        }
+        
 
-        System.out.println(pontosDesnivel.contains(p));
+        if (pontosDesnivel.contains(p.x1) && !pulando){
+            if (nivel % 2 == 0){
+                if (direcao == DIREITA) p.x2 -= 2;
+                else if (direcao == ESQUERDA) p.x2 += 2;
+            }
+            else{
+                if (direcao == DIREITA) p.x2 += 2;
+                else if (direcao == ESQUERDA) p.x2 -= 2;
+            }
+            chao = p.x2;
+        }
 
         setBounds(p.x1, p.x2, getWidth(), getHeight());
         repaint();
 
     }
 
+    public void pulo(){
+        if (teclas[KeyEvent.VK_SPACE]){
+            pulando = true;
+            System.out.println("Apertou");
+            SwingUtilities.invokeLater(() -> requestFocusInWindow());
+            new Thread(()->{
+                int i = 0;
+                while (pulando) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                    }
+                    i += gravidade;
+                    p.x2 -= gravidade;
+                    if (i == 28) break;
+                    movimentos();
+                    setBounds(p.x1, p.x2, getWidth(), getHeight());
+                    repaint();
+                }
+
+                while (p.x2 < chao) {
+                    p.x2 += gravidade;
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                    }
+                    movimentos();
+                    setBounds(p.x1, p.x2, getWidth(), getHeight());
+                    repaint();
+                }
+            pulando = false;
+            }).start();
+        }
+        
+        
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         teclas[e.getKeyCode()] = true;
-        movimentos();   
+        movimentos();
     }
 
     @Override
@@ -108,6 +206,12 @@ public class Mario extends JPanel implements KeyListener{
     }
     @Override
     public void keyTyped(KeyEvent e) {
+        teclas[e.getKeyCode()] = true;
+        pulo();
+        try {
+            Thread.sleep(60);
+        } catch (Exception error) {
+        }
     }
 
     public static void main(String[] args) throws IOException{

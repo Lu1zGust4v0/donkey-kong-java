@@ -135,6 +135,7 @@ class Imagens extends JPanel implements Runnable{
             new Thread(()->{
                 while (true) {
                     jumpMan.movimentos();
+                    jumpMan.pulo();
                     repaint();
                     try {
                         Thread.sleep(2000);
