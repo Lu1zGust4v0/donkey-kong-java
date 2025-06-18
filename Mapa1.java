@@ -110,11 +110,12 @@ class Imagens extends JPanel implements Runnable{
     
     int i = 0, j = 0, nivelPlataforma = 0, q = 0, a = 0;
     boolean direita = true, caindo = false, primeiravez = true, mostraBarrilAzul = false;
-    double dx = 148.00, dy = 105.00, dy_azul = 120.00, dx_azul = 90.00;
-    double[] alturasPlataformas = {157, 215, 277, 338, 395};
+    double dx = 148.00, dy = 108.00, dy_azul = 120.00, dx_azul = 90.00;
+    double[] alturasPlataformas = {158, 217, 278, 338, 399};
     
     Image[] sprites = new Image[5];
     Image[] barril = new Image[4];
+    Image[] barrilFrente = new Image[2];
     ArrayList<Barril> barris = new ArrayList<>();
     Image[] fogo = new Image[2];
     Image[] barrilAzul = new Image[2];
@@ -157,6 +158,8 @@ class Imagens extends JPanel implements Runnable{
         barril[1] = ImageIO.read(new File("sprites/barril2.png"));
         barril[2] = ImageIO.read(new File("sprites/barril3.png"));
         barril[3] = ImageIO.read(new File("sprites/barril4.png"));
+        barrilFrente[0] = ImageIO.read(new File("sprites/barril_frente_1.png"));
+        barrilFrente[1] = ImageIO.read(new File("sprites/barril_frente_2.png"));
         fogo[0] = ImageIO.read(new File("sprites/fogo1_preview.png"));
         fogo[1] = ImageIO.read(new File("sprites/fogo2_preview.png"));
         barrilAzul[0] = ImageIO.read(new File("sprites/barril_azul_1.png"));
@@ -209,7 +212,7 @@ class Imagens extends JPanel implements Runnable{
                 primeiravez = false;
             }
             if(i==4)
-                barris.add(new Barril(dx, dy, direita, alturasPlataformas, barril));
+                barris.add(new Barril(dx, dy, direita, alturasPlataformas, barril, barrilFrente));
             if(i==5)
                 i=0;
             try {
@@ -251,7 +254,7 @@ public void run() {
                     Barril b = barris.get(ind);
                     b.atualizar();
 
-                    if(b.dx > 50 && b.dx < 60 && b.dy > 400){
+                    if(b.dx > 50 && b.dx < 60 && b.dy > 380){
                         barris.remove(ind);
                         ind--;
                     }
@@ -279,6 +282,7 @@ class Barril {
     int nivelPlataforma;
     double[] alturasPlataformas;
     Image[] imagens;
+    Image[] imagemBarrilFrente;
     static Map<Integer, double[]> escadasPorNivel = new HashMap<>();
     static {
         escadasPorNivel.put(0, new double[] {225, 444});
@@ -288,7 +292,9 @@ class Barril {
         escadasPorNivel.put(4, new double[] {196, 444});
     }
 
-    Barril(double dx, double dy, boolean direita, double[] alturasPlataformas, Image[] imagens) {
+    double[] alturasPlataformasEsc = {168, 158, 230, 224, 220, 291, 288, 280, 345, 342, 406, 400};
+
+    Barril(double dx, double dy, boolean direita, double[] alturasPlataformas, Image[] imagens, Image[] imagemBarrilFrente) {
         this.dx = dx;
         this.dy = dy;
         this.direita = direita;
@@ -297,17 +303,20 @@ class Barril {
         this.nivelPlataforma = 0;
         this.alturasPlataformas = alturasPlataformas;
         this.imagens = imagens;
+        this.imagemBarrilFrente = imagemBarrilFrente;
     }
 
     void atualizar() {
-        //if(!descerEscada())
+        if(!vaiDescerEscada)
             j = (j + 1) % 4;
-        //else
-            //e = (e + 1) % 2;
+        else
+            e = (e + 1) % 2;
 
         if (descendoEscada) {
             dy += 4;
-            if (nivelPlataforma < alturasPlataformas.length && dy >= alturasPlataformas[nivelPlataforma]) {
+            int escadaAtual = encontrarEscada();
+
+            if (nivelPlataforma < alturasPlataformas.length && dy >= alturasPlataformasEsc[escadaAtual]) {
                 descendoEscada = false;
                 decidiuDescerEscada = false;
                 vaiDescerEscada = false;
@@ -336,15 +345,16 @@ class Barril {
         } else{
             if (direita) {
                 dx += 5;
-                dy += 0.15;
+                dy += 0.16;
                 if (dx > 495 && dx < 505) {
                     direita = false;
                     caindo = true;
                 }
             } else {
                 dx -= 5;
-                dy += 0.15;
-                if (dx > 30 && dx < 35) {
+                if(!(nivelPlataforma==5 && dx < 245))
+                    dy += 0.16;
+                if (dx > 29 && dx < 35) {
                     direita = true;
                     caindo = true;
                 }
@@ -354,7 +364,7 @@ class Barril {
         if (descerEscada()) {
             if (!decidiuDescerEscada) {
                 decidiuDescerEscada = true;
-                vaiDescerEscada = Math.random() < 0.5;
+                vaiDescerEscada = Math.random() < 0.4;
             }
             if (vaiDescerEscada) {
                 descendoEscada = true;
@@ -376,13 +386,52 @@ class Barril {
         return false;
     }
 
+    int encontrarEscada() {
+        double[] escadas = escadasPorNivel.getOrDefault(nivelPlataforma, new double[0]);
+        int maisProxima = -1;
+        double menorDistancia = Double.MAX_VALUE;
+
+        for (double escadaX : escadas) {
+            double distancia = Math.abs(dx - escadaX);
+            if (distancia < menorDistancia) {
+                menorDistancia = distancia;
+                if(escadaX == 225.0)
+                    maisProxima = 0;
+                if(escadaX == 444.0 && nivelPlataforma == 0)
+                    maisProxima = 1;
+                if(escadaX == 388.0)
+                    maisProxima = 2;
+                if(escadaX == 194.0)
+                    maisProxima = 3;
+                if(escadaX == 84.0)
+                    maisProxima = 4;
+                if(escadaX == 169.0)
+                    maisProxima = 5;
+                if(escadaX == 251.0)
+                    maisProxima = 6;
+                if(escadaX == 444.0 && nivelPlataforma == 2)
+                    maisProxima = 7;
+                if(escadaX == 224.0)
+                    maisProxima = 8;
+                if(escadaX == 85.0)
+                    maisProxima = 9;
+                if(escadaX == 196.0)
+                    maisProxima = 10;
+                if(escadaX == 444.0 && nivelPlataforma == 4)
+                    maisProxima = 11;
+            }
+        }
+        return maisProxima;
+    }
+
     void desenhar(Graphics g) {
-        if(!descerEscada())
+        if(!vaiDescerEscada)
             g.drawImage(imagens[j], (int) dx, (int) dy, 25, 25, null);
         else
-            g.drawImage(imagens[j], (int) dx, (int) dy, 25, 25, null);
+            g.drawImage(imagemBarrilFrente[e], (int) dx, (int) dy, 25, 25, null);
     }
 }
+
 class Sound{
         Clip clip;
         URL soundURL[] = new URL[30];
