@@ -141,6 +141,7 @@ public class Mario extends JPanel implements KeyListener{
                     escada = false;
                     p.x1 += 2;
                     p.x2 -= 2;
+                    chao = p.x2;
                 }
                 System.out.println(nivel);
             }
@@ -175,16 +176,18 @@ public class Mario extends JPanel implements KeyListener{
         }
         
 
-        if (pontosDesnivel.contains(p.x1) && !pulando){
+        if (pontosDesnivel.contains(p.x1)){
             if (nivel % 2 == 0){
-                if (direcao == DIREITA) p.x2 -= 2;
-                else if (direcao == ESQUERDA) p.x2 += 2;
+                if (direcao == DIREITA) chao -= 2; //chao -= 2;
+                else if (direcao == ESQUERDA) chao += 2;
             }
             else{
-                if (direcao == DIREITA) p.x2 += 2;
-                else if (direcao == ESQUERDA) p.x2 -= 2;
+                if (direcao == DIREITA) chao += 2;
+                else if (direcao == ESQUERDA) chao -= 2;
             }
-            chao = p.x2;
+            if (!pulando) p.x2 = chao;
+            //chao = p.x2;
+            //p.x2 = chao;
         }
 
         
@@ -213,9 +216,10 @@ public class Mario extends JPanel implements KeyListener{
                     setBounds(p.x1, p.x2, getWidth(), getHeight());
                     repaint();
                 }
-
+                pulando = false;
                 while (p.x2 < chao) {
                     p.x2 += gravidade;
+                    
                     try {
                         Thread.sleep(100);
                     } catch (Exception e) {
@@ -224,7 +228,7 @@ public class Mario extends JPanel implements KeyListener{
                     setBounds(p.x1, p.x2, getWidth(), getHeight());
                     repaint();
                 }
-            pulando = false;
+            //pulando = false;
             }).start();
         }
         
