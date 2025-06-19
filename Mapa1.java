@@ -137,6 +137,9 @@ class Imagens extends JPanel implements Runnable{
                 while (true) {
                     jumpMan.movimentos();
                     jumpMan.pulo();
+
+                    //if (jumpMan.getBounds().intersects(Barril.));
+
                     repaint();
                     try {
                         Thread.sleep(2000);
@@ -240,9 +243,15 @@ protected void paintComponent(Graphics g){
     else
         g.drawImage(sprites[i], 50, 50,100,100,null);
 
-    for (Barril b : barris) 
+    for (Barril b : barris){
         b.desenhar(g);
+        Rectangle brect = new Rectangle((int)b.dx+10, (int)b.dy+10, 1, 1);
+        Rectangle marioRectangle = jumpMan.getBounds();
 
+        if (marioRectangle.intersects(brect)){
+            System.out.println("O barril encostou no mario");
+        }
+    }
     g.drawImage(fogo[q], 43, 368, 43, 30, null);
     if(mostraBarrilAzul)
         g.drawImage(barrilAzul[a], (int) dx_azul, (int) dy_azul, 25, 25, null);
@@ -271,7 +280,7 @@ public void run() {
         }
 }
 
-class Barril {
+class Barril{
     double dx, dy;
     int j = 0, e = 0;
     boolean direita;

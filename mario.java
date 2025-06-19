@@ -18,10 +18,11 @@ public class Mario extends JPanel implements KeyListener{
     public static final int MORRENDO = 4;
     
     ArrayList<Integer> pontosDesnivel = new ArrayList<Integer>();
-
+    ArrayList<Integer> escadasBoas = new ArrayList<Integer>();
+    ArrayList<Integer> proximoNivel = new ArrayList<Integer>();
 
     Ponto p;
-    boolean pulando = false;
+    boolean pulando = false, escada = false;
     int direcao, frame, chao = 410, nivel = 0, alturaPulo = 28, gravidade = 7;
     BufferedImage[][] sprites;
     BufferedImage[] morte;
@@ -35,6 +36,15 @@ public class Mario extends JPanel implements KeyListener{
         p = new Ponto(x, y);
         setSize(30, 30);
         addArray(pontosDesnivel);
+
+        proximoNivel.add(356);
+        proximoNivel.add(296);
+        proximoNivel.add(234);
+        proximoNivel.add(174);
+        proximoNivel.add(114);
+        proximoNivel.add(60);
+        
+
         frame = 0;
         try {
             //inicial = javax.imageio.ImageIO.read(new File("sprites/m1.png"));
@@ -59,12 +69,16 @@ public class Mario extends JPanel implements KeyListener{
 
     public void addArray(ArrayList<Integer> desniveis){
         desniveis.clear();
+
+        escadasBoas.clear();
         if (nivel == 0){
             desniveis.add(256);
             desniveis.add(312);
             desniveis.add(366);
             desniveis.add(422);
             desniveis.add(478);
+
+            escadasBoas.add(446);
         }
         else if (nivel == 1 || nivel == 3){
             desniveis.add(444);
@@ -75,6 +89,9 @@ public class Mario extends JPanel implements KeyListener{
             desniveis.add(166);
             desniveis.add(112);
             desniveis.add(56);
+
+            
+            escadasBoas.add(88);
         }
         else if (nivel == 2 || nivel == 4){
             desniveis.add(90);
@@ -85,57 +102,76 @@ public class Mario extends JPanel implements KeyListener{
             desniveis.add(366);
             desniveis.add(424);
             desniveis.add(478);
+
+            escadasBoas.add(446);
         }
         else if (nivel == 5){
             desniveis.add(276);
             desniveis.add(388);
+
+            escadasBoas.add(308);
         }
     }
     public void movimentos(){
-        if (teclas[KeyEvent.VK_LEFT]) {
+        if (teclas[KeyEvent.VK_LEFT] && !escada) {
             p.x1 -= VELOCIDADE;
             direcao = ESQUERDA;
             frame++;
             if (frame > 1) frame = 0;
         }
-        if (teclas[KeyEvent.VK_RIGHT]) {
+        if (teclas[KeyEvent.VK_RIGHT] && !escada) {
             p.x1 += VELOCIDADE;
             direcao = DIREITA;
             frame++;
             if (frame > 1) frame = 0;
         }
 
-        if (teclas[KeyEvent.VK_DOWN]){
-            p.x2 += VELOCIDADE;
-        }
+        //if (teclas[KeyEvent.VK_UP]){
+        //    p.x2 -= VELOCIDADE;
+        //}
 
-        if (teclas[KeyEvent.VK_UP]){
-            p.x2 -= VELOCIDADE;
+        if (escadasBoas.contains(p.x1)){
+            if (teclas[KeyEvent.VK_UP]){
+                escada = true;
+                direcao = ESCADA;
+                p.x2 -= VELOCIDADE;
+                frame++;
+                if (frame > 1) frame = 0;
+                if (proximoNivel.contains(p.x2)){
+                    escada = false;
+                    p.x1 += 2;
+                    p.x2 -= 2;
+                }
+                System.out.println(nivel);
+            }
         }
         
-        if (p.x2 >= 376){
+        if (p.x2 >= 357){
             nivel = 0;
             addArray(pontosDesnivel);
         }
-        else if (p.x2 >= 320 && p.x2 < 376) {
+        else if (p.x2 >= 297 && p.x2 < 357) {
             nivel = 1;
             addArray(pontosDesnivel);
         }
-        else if (p.x2 >= 262 && p.x2 < 320) {
+        else if (p.x2 >= 235 && p.x2 < 297) {
             nivel = 2;
             addArray(pontosDesnivel);
         }
-        else if (p.x2 >= 200 && p.x2 < 262) {
+        else if (p.x2 >= 175 && p.x2 < 235) {
             nivel = 3;
             addArray(pontosDesnivel);
         }
-        else if (p.x2 >= 140 && p.x2 < 200) {
+        else if (p.x2 >= 115 && p.x2 < 175) {
             nivel = 4;
             addArray(pontosDesnivel);
         }
-        else if (p.x2 >= 88 && p.x2 < 140) {
+        else if (p.x2 >= 61 && p.x2 < 115) {
             nivel = 5;
             addArray(pontosDesnivel);
+        }
+        else if (p.x2 < 61){
+            //JOptionPane.showMessageDialog(null, "Voce venceu!", "Vitoria", JOptionPane.INFORMATION_MESSAGE);
         }
         
 
@@ -151,13 +187,15 @@ public class Mario extends JPanel implements KeyListener{
             chao = p.x2;
         }
 
+        
+
         setBounds(p.x1, p.x2, getWidth(), getHeight());
         repaint();
 
     }
 
     public void pulo(){
-        if (teclas[KeyEvent.VK_SPACE]){
+        if (teclas[KeyEvent.VK_SPACE] && !escada){
             pulando = true;
             System.out.println("Apertou");
             SwingUtilities.invokeLater(() -> requestFocusInWindow());
