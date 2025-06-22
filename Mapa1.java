@@ -296,9 +296,17 @@ protected void paintComponent(Graphics g){
         Rectangle brect = new Rectangle((int)b.dx+10, (int)b.dy+10, 1, 1);
         Rectangle marioRectangle = jumpMan.getBounds();
         Rectangle fire = new Rectangle((int)foguinho.dx+10, (int)foguinho.dy+10, 10,10);
+        Rectangle blue = new Rectangle((int)dx_azul+10, (int)dy_azul+10, 25, 25);
 
         if (marioRectangle.intersects(brect)){
             System.out.println("O barril encostou no mario");
+            sound1.setFile(2);
+            sound1.play();
+            Mapa1.troca();
+            return;
+        }
+        if (marioRectangle.intersects(blue)){
+            System.out.println("O barril blue encostou no mario");
             sound1.setFile(2);
             sound1.play();
             Mapa1.troca();
