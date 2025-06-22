@@ -19,6 +19,7 @@ public class Mapa1 extends JFrame implements MouseListener {
     public JPanel imagens;
     private Mario jumpMan;
     private JPanel perdeu;
+    private JPanel win;
     Sound sound = new Sound();
     Thread gameThread;
     public Mapa1() {
@@ -43,12 +44,23 @@ public class Mapa1 extends JFrame implements MouseListener {
         revalidate();
         repaint();
     }
+    public void fim(){
+        stopMusic();
+        playMusic(4);
+        win = new Win();
+        remove(imagens);
+        add(win);
+        win.addMouseListener(this);
+        revalidate();
+        repaint();
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
 
         if(e.getSource() ==inicio){
+            System.out.println("x:"+e.getX()+"y:"+e.getY());
         // Ajuste as coordenadas conforme a posição dos botões no painel Inicio
 
             Rectangle playArea = new Rectangle(220, 235, 120, 20);
@@ -75,6 +87,20 @@ public class Mapa1 extends JFrame implements MouseListener {
             }
             else if(playArea.contains(x,y)){
                 remove(perdeu);
+                imagens = new Imagens(this);
+                add(imagens);
+                playMusic(1);
+                imagens.repaint();
+                revalidate();
+            }
+        }
+        else if(e.getSource() == win){
+            Rectangle playArea = new Rectangle(418, 251, 80, 60);
+            Rectangle exitArea = new Rectangle(418, 338, 70, 20);
+            if(exitArea.contains(x,y))
+                System.exit(0);
+            else if(playArea.contains(x,y)){
+                remove(win);
                 imagens = new Imagens(this);
                 add(imagens);
                 playMusic(1);
@@ -119,9 +145,23 @@ class Inicio extends JPanel{
     }
 
     protected void paintComponent(Graphics g){
-        super.paintComponents(g);
+        super.paintComponent(g);
         g.drawImage(inicio, 0, 0, 550, 450,null);
     }
+}
+class Win extends JPanel{
+    BufferedImage fim;
+    Win(){
+        try{
+            fim = javax.imageio.ImageIO.read(new java.io.File("sprites/venceu.png"));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.drawImage(fim, 0, 0, 550, 450,null);
+}
 }
 
 class Imagens extends JPanel implements Runnable{
@@ -297,6 +337,7 @@ protected void paintComponent(Graphics g){
         Rectangle marioRectangle = jumpMan.getBounds();
         Rectangle fire = new Rectangle((int)foguinho.dx+10, (int)foguinho.dy+10, 10,10);
         Rectangle blue = new Rectangle((int)dx_azul+10, (int)dy_azul+10, 25, 25);
+        Rectangle prin = new Rectangle(240, 33, 50, 50);
 
         if (marioRectangle.intersects(brect)){
             System.out.println("O barril encostou no mario");
@@ -319,7 +360,13 @@ protected void paintComponent(Graphics g){
             Mapa1.troca();
             return;
         }
+    if(marioRectangle.intersects(prin)){
+        sound1.setFile(3);
+        sound1.play();
+        Mapa1.fim();
+        return;
     }
+}
     g.drawImage(fogo[q], 43, 368, 43, 30, null);
     if(mostraBarrilAzul)
         g.drawImage(barrilAzul[a], (int) dx_azul, (int) dy_azul, 25, 25, null);
@@ -357,7 +404,9 @@ class Sound{
             soundURL[0] = getClass().getResource("/sound/menu.wav");
             soundURL[1] = getClass().getResource("/sound/mapa1.wav");
             soundURL[2] = getClass().getResource("/sound/morreu.wav");
-        }
+            soundURL[3] = getClass().getResource("/sound/venceu.wav");
+            soundURL[4] = getClass().getResource("/sound/final");
+       }
         void setFile(int i){
             try{
                 AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
