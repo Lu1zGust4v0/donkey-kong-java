@@ -85,6 +85,10 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(56);
 
             escadasBoas.add(88);
+            if(nivel == 1)
+                escadasBoas.add(226);
+            if(nivel ==3)
+                escadasBoas.add(198);
         } else if (nivel == 2 || nivel == 4) {
             desniveis.add(90);
             desniveis.add(144);
@@ -96,6 +100,8 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(478);
 
             escadasBoas.add(446);
+            if(nivel ==2)
+                escadasBoas.add(254);
         } else if (nivel == 5) {
             desniveis.add(276);
             desniveis.add(388);
@@ -103,7 +109,12 @@ public class Mario extends JPanel implements KeyListener {
             escadasBoas.add(308);
         }
     }
-
+    public boolean buraco(){
+        if ((p.x1 >= 494) && (p.x2 == 354 || p.x2 == 112)) return true;
+        if ((p.x1 >= 36) && (p.x2 == 294 || p.x2 == 172)) return true;
+        if ((p.x1 >= 330) && p.x2 == 58) return true;
+    return false;
+    }
     public void movimentos() {
         if (teclas[KeyEvent.VK_LEFT] && !escada) {
             p.x1 -= VELOCIDADE;
@@ -131,7 +142,21 @@ public class Mario extends JPanel implements KeyListener {
                 }
             }
         }
-
+        //descer escada
+        if (escadasBoas.contains(p.x1)) {
+            if (teclas[KeyEvent.VK_DOWN]) {
+                escada = true;
+                direcao = ESCADA;
+                p.x2 += VELOCIDADE;
+                frame = (frame + 1) % 2;
+                if (proximoNivel.contains(p.x2)) {
+                    escada = false;
+                    p.x1 += 2;
+                    p.x2 -= 2;
+                    chao = p.x2;
+                }
+            }
+        }
         // Atualiza nível baseado no eixo Y
         if (p.x2 >= 357) {
             nivel = 0;

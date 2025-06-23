@@ -405,7 +405,7 @@ class Sound{
             soundURL[1] = getClass().getResource("/sound/mapa1.wav");
             soundURL[2] = getClass().getResource("/sound/morreu.wav");
             soundURL[3] = getClass().getResource("/sound/venceu.wav");
-            soundURL[4] = getClass().getResource("/sound/final");
+            soundURL[4] = getClass().getResource("/sound/final.wav");
        }
         void setFile(int i){
             try{
