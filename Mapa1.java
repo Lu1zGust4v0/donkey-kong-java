@@ -207,16 +207,23 @@ class Imagens extends JPanel implements Runnable{
             new Thread(()->{
                 while (true) {
                     if (jumpMan.buraco() && !jumpMan.caindo){
-                        try {
-                            jumpMan.cair();
-                            wait();
-                        } catch (InterruptedException e) {}
-                        System.out.println("passou");
-                        sound1.setFile(2);
-                        sound1.play();
-                        Mapa1.troca();
-                        return;
-                    }
+                                jumpMan.cair();
+                                new Thread(() -> {
+                                    while (jumpMan.caindo) {
+                                        try {
+                                            Thread.sleep(50);
+                                        } catch (Exception e) {}
+                                    }/* 
+                                    SwingUtilities.invokeLater(() -> {
+                                        System.out.println("passou");
+                                        sound1.setFile(2);
+                                        sound1.play();
+                                        Mapa1.troca();
+                                        
+                                    });*/
+                                }).start();
+                            }
+
 
                     jumpMan.movimentos();
                     jumpMan.pulo();
