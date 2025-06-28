@@ -19,11 +19,11 @@ public class Mario extends JPanel implements KeyListener {
     ArrayList<Integer> escadasBoas = new ArrayList<>();
     ArrayList<Integer> proximoNivel = new ArrayList<>();
 
-    public Ponto p;
-    public boolean pulando = false, escada = false;
-    public int direcao, frame, chao = 390, nivel = 0; // chao ajustado para 390
-    public int alturaPulo = 28, gravidade = 7;
-    public BufferedImage[][] sprites;
+    Ponto p;
+    boolean pulando = false, escada = false, caindo = false;
+    int direcao, frame, chao = 410, nivel = 0;
+    int alturaPulo = 28, gravidade = 7;
+    BufferedImage[][] sprites;
     static final int VELOCIDADE = 2;
     int spritenum = 1;
     int spritecounter = 0;
@@ -31,6 +31,7 @@ public class Mario extends JPanel implements KeyListener {
 
     Mario(int x, int y) throws IOException {
         setFocusable(true);
+        //setOpaque(false);
         setBackground(null);
         p = new Ponto(x, y);
         setSize(30, 30);
@@ -143,6 +144,28 @@ public class Mario extends JPanel implements KeyListener {
         if ((p.x1 >= 330) && p.x2 == 38) return true;
         return false;
     }
+
+    public void cair(){
+        if (buraco() && !caindo){
+            caindo = true;
+            int posInicial = p.x2;
+            new Thread(()->{
+                while ((p.x2 - posInicial) < 44){
+                    p.x2 += 4;
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {}
+                    setBounds(p.x1, p.x2, 20, 20);
+                    repaint();
+                    
+                }
+            }).start();
+            caindo = false;
+            System.out.println(nivel);
+            chao = p.x2;
+        }
+    }
+
     public void movimentos() {
         spritecounter++;
         if(spritecounter>10){
@@ -153,11 +176,12 @@ public class Mario extends JPanel implements KeyListener {
             spritecounter = 0;
         }
         if (teclas[KeyEvent.VK_LEFT] && !escada) {
+        if (teclas[KeyEvent.VK_LEFT] && !escada && !caindo) {
             p.x1 -= VELOCIDADE;
             direcao = ESQUERDA;
             frame = (frame + 1) % 2;
         }
-        if (teclas[KeyEvent.VK_RIGHT] && !escada) {
+        if (teclas[KeyEvent.VK_RIGHT] && !escada && !caindo) {
             p.x1 += VELOCIDADE;
             direcao = DIREITA;
             frame = (frame + 1) % 2;
@@ -236,7 +260,7 @@ public class Mario extends JPanel implements KeyListener {
     }
 
     public void pulo() {
-        if (teclas[KeyEvent.VK_SPACE] && !escada) {
+        if (teclas[KeyEvent.VK_SPACE] && !escada && !caindo) {
             pulando = true;
             new Thread(() -> {
                 int i = 0;

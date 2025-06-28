@@ -208,7 +208,6 @@ class Imagens extends JPanel implements Runnable{
                 while (true) {
                     jumpMan.movimentos();
                     jumpMan.pulo();
-
                     //if (jumpMan.getBounds().intersects(Barril.));
 
                     repaint();
