@@ -21,10 +21,12 @@ public class Mario extends JPanel implements KeyListener {
 
     Ponto p;
     boolean pulando = false, escada = false, caindo = false;
-    int direcao, frame, chao = 410, nivel = 0;
+    int direcao, frame, chao = 390, nivel = 0;
     int alturaPulo = 28, gravidade = 7;
     BufferedImage[][] sprites;
     static final int VELOCIDADE = 2;
+    int spritenum =1;
+    int spritecounter = 0;
 
     boolean[] teclas = new boolean[256];
 
@@ -36,12 +38,12 @@ public class Mario extends JPanel implements KeyListener {
         setSize(30, 30);
         addArray(pontosDesnivel);
 
-        proximoNivel.add(356);
-        proximoNivel.add(296);
-        proximoNivel.add(234);
-        proximoNivel.add(174);
-        proximoNivel.add(114);
-        proximoNivel.add(60);
+        proximoNivel.add(336);
+        proximoNivel.add(276);
+        proximoNivel.add(204);
+        proximoNivel.add(154);
+        proximoNivel.add(94);
+        proximoNivel.add(40);
 
         frame = 0;
 
@@ -53,15 +55,38 @@ public class Mario extends JPanel implements KeyListener {
         sprites[1][1] = ImageIO.read(new File("sprites/m4.png"));
         sprites[2][0] = ImageIO.read(new File("sprites/m5.png"));
         sprites[2][1] = ImageIO.read(new File("sprites/m6.png"));
-
+        setOpaque(false);
         addKeyListener(this);
     }
-
     @Override
-    protected void paintComponent(Graphics g) {
+     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(sprites[direcao][frame], 0, 0, 60, 60, null);
-    }
+        BufferedImage image = null;
+    switch(direcao){
+        case DIREITA:
+            if(spritenum == 1)
+                image = sprites[0][0];
+            else
+                image = sprites[0][1];
+            break;
+        case ESQUERDA:
+            if(spritenum == 1)
+                image = sprites[1][0];
+            else
+                image = sprites[1][1];
+            break;
+
+     case ESCADA:
+        if(spritenum == 1)
+            image = sprites[2][0];
+        else
+            image = sprites[2][1];
+        break;
+
+}
+
+     g.drawImage(image, 0, 0, getWidth(),getHeight(),null);
+}
 
     public void addArray(ArrayList<Integer> desniveis) {
         desniveis.clear();
@@ -139,6 +164,14 @@ public class Mario extends JPanel implements KeyListener {
     }
 
     public void movimentos() {
+        spritecounter++;
+        if(spritecounter>3){
+            if(spritenum==1)
+                spritenum =2;
+            else
+                spritenum =1;
+            spritecounter = 0;
+        }
         if (teclas[KeyEvent.VK_LEFT] && !escada && !caindo) {
             p.x1 -= VELOCIDADE;
             direcao = ESQUERDA;
@@ -219,7 +252,7 @@ public class Mario extends JPanel implements KeyListener {
         if (p.x2 < 0) p.x2 = 0;
         if (p.x2 > 410) p.x2 = 410;
 
-        setBounds(p.x1, p.x2, 20, 20);
+        setBounds(p.x1, p.x2, 48, 48);
         repaint();
     }
 

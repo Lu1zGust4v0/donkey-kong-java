@@ -197,7 +197,7 @@ class Imagens extends JPanel implements Runnable{
             princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
             mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
             
-            jumpMan = new Mario(108, 410);
+            jumpMan = new Mario(108, 390);
             setLayout(null);
             jumpMan.setBounds(jumpMan.p.x1, jumpMan.p.x2, 20,20);
             add(jumpMan);
@@ -324,7 +324,6 @@ protected void paintComponent(Graphics g){
     g.setFont(new Font("Century Gothic", Font.BOLD, 10));
     g.drawString("mario_x:"+jumpMan.p.x1, 0, 20);
     g.drawString("mario_y:"+jumpMan.p.x2, 0, 40);
-
     if(i!=3)
         g.drawImage(sprites[i], 50, 35,100,100,null);
     else
