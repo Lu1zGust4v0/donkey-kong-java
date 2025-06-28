@@ -136,31 +136,29 @@ public class Mario extends JPanel implements KeyListener {
         }
     }
     public boolean buraco(){
-        if ((p.x1 >= 494) && (p.x2 == 354 || p.x2 == 112)) return true;
+        if ((p.x1 >= 494) && (p.x2 == 334 || p.x2 == 112)) return true;
         if ((p.x1 >= 36) && (p.x2 == 294 || p.x2 == 172)) return true;
         if ((p.x1 >= 330) && p.x2 == 58) return true;
     return false;
     }
 
+    
     public void cair(){
-        if (buraco() && !caindo){
-            caindo = true;
-            int posInicial = p.x2;
-            new Thread(()->{
-                while ((p.x2 - posInicial) < 44){
-                    p.x2 += 4;
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {}
-                    setBounds(p.x1, p.x2, 20, 20);
-                    repaint();
-                    
-                }
-            }).start();
-            caindo = false;
-            System.out.println(nivel);
-            chao = p.x2;
-        }
+        caindo = true;
+        int posInicial = p.x2;
+
+        SwingUtilities.invokeLater(() -> requestFocusInWindow());
+        new Thread(()->{
+            while ((p.x2 - posInicial) < 42){
+                p.x2 += gravidade;
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {}
+                setBounds(p.x1, p.x2, 48, 48);
+                repaint();
+            }
+        }).start();
+        notify();
     }
 
     public void movimentos() {
@@ -217,19 +215,19 @@ public class Mario extends JPanel implements KeyListener {
         if (p.x2 >= 357) {
             nivel = 0;
             addArray(pontosDesnivel);
-        } else if (p.x2 >= 297) {
+        } else if (p.x2 >= 297 && !escada) {
             nivel = 1;
             addArray(pontosDesnivel);
-        } else if (p.x2 >= 235) {
+        } else if (p.x2 >= 235 && !escada) {
             nivel = 2;
             addArray(pontosDesnivel);
-        } else if (p.x2 >= 175) {
+        } else if (p.x2 >= 175 && !escada) {
             nivel = 3;
             addArray(pontosDesnivel);
-        } else if (p.x2 >= 115) {
+        } else if (p.x2 >= 115 && !escada) {
             nivel = 4;
             addArray(pontosDesnivel);
-        } else if (p.x2 >= 61) {
+        } else if (p.x2 >= 61 && !escada) {
             nivel = 5;
             addArray(pontosDesnivel);
         }
