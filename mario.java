@@ -60,7 +60,7 @@ public class Mario extends JPanel implements KeyListener {
     }
     @Override
      protected void paintComponent(Graphics g){
-        super.paintComponent(g);
+        //super.paintComponent(g);
         BufferedImage image = null;
     switch(direcao){
         case DIREITA:
@@ -297,6 +297,9 @@ public void keyPressed(KeyEvent e) {
 public void keyReleased(KeyEvent e) {
     teclas[e.getKeyCode()] = false;
     movimentos();
+    spritenum=2;
+    repaint();
+    spritenum =1;
 }
 
 @Override

@@ -316,14 +316,14 @@ class Imagens extends JPanel implements Runnable{
 }
 
 protected void paintComponent(Graphics g){
-    super.paintComponents(g);
+    super.paintComponent(g);
     g.drawImage(map1, 0, 0, 550, 450,null);
     g.drawImage(princess, 240,33, 50,50, null);
 
-    g.setColor(Color.white);
+    /*g.setColor(Color.white);
     g.setFont(new Font("Century Gothic", Font.BOLD, 10));
     g.drawString("mario_x:"+jumpMan.p.x1, 0, 20);
-    g.drawString("mario_y:"+jumpMan.p.x2, 0, 40);
+    g.drawString("mario_y:"+jumpMan.p.x2, 0, 40);*/
     if(i!=3)
         g.drawImage(sprites[i], 50, 35,100,100,null);
     else
