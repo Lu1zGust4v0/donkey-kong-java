@@ -14,7 +14,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Collection;
 public class Mapa1 extends JFrame implements MouseListener {
     private JPanel inicio;
     public JPanel imagens;
@@ -196,10 +195,11 @@ class Imagens extends JPanel implements Runnable{
         try{
             map1 = javax.imageio.ImageIO.read(new java.io.File("sprites/mapa1.png"));
             princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
+            mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
             
-            jumpMan = new Mario(108, 390);
+            jumpMan = new Mario(108, 410);
             setLayout(null);
-            jumpMan.setBounds(jumpMan.p.x1, jumpMan.p.x2, 64, 64);
+            jumpMan.setBounds(jumpMan.p.x1, jumpMan.p.x2, 20,20);
             add(jumpMan);
             jumpMan.requestFocusInWindow();
             
@@ -319,9 +319,12 @@ protected void paintComponent(Graphics g){
     super.paintComponents(g);
     g.drawImage(map1, 0, 0, 550, 450,null);
     g.drawImage(princess, 240,33, 50,50, null);
-    //g.setFont(new Font("Century Gothic", Font.BOLD, 10));
-    //g.drawString("mario_x:"+jumpMan.p.x1, 0, 20);
-    //g.drawString("mario_y:"+jumpMan.p.x2, 0, 40);
+
+    g.setColor(Color.white);
+    g.setFont(new Font("Century Gothic", Font.BOLD, 10));
+    g.drawString("mario_x:"+jumpMan.p.x1, 0, 20);
+    g.drawString("mario_y:"+jumpMan.p.x2, 0, 40);
+
     if(i!=3)
         g.drawImage(sprites[i], 50, 35,100,100,null);
     else
