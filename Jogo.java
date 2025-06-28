@@ -7,11 +7,15 @@ public class Jogo extends JPanel implements KeyListener {
     private boolean[] teclas = new boolean[256];
 
     public Jogo() throws Exception {
-        setPreferredSize(new Dimension(640, 480));
-        setBackground(Color.BLUE);
-        jogador = new Jogador(100, 100);
-        addKeyListener(this);
-        setFocusable(true);
+        try{
+            setPreferredSize(new Dimension(640, 480));
+            setBackground(Color.BLUE);
+            jogador = new Jogador(100, 100);
+            addKeyListener(this);
+            setFocusable(true);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void paintComponent(Graphics g) {
