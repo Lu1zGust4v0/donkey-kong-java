@@ -20,7 +20,7 @@ public class Mario extends JPanel implements KeyListener {
     ArrayList<Integer> proximoNivel = new ArrayList<>();
 
     Ponto p;
-    boolean pulando = false, escada = false, caindo = false;
+    boolean pulando = false, escada = false, caindo = false, andando = false;
     int direcao, frame, chao = 390, nivel = 0;
     int alturaPulo = 28, gravidade = 7;
     BufferedImage[][] sprites;
@@ -182,7 +182,7 @@ public class Mario extends JPanel implements KeyListener {
     }
 
     public void movimentos() {
-        System.out.println(nivel);
+        //System.out.println(nivel);
         spritecounter++;
         if(spritecounter>3){
             if(spritenum==1)
@@ -194,11 +194,13 @@ public class Mario extends JPanel implements KeyListener {
         if (teclas[KeyEvent.VK_LEFT] && !escada && !caindo) {
             p.x1 -= VELOCIDADE;
             direcao = ESQUERDA;
+            andando = true;
             frame = (frame + 1) % 2;
         }
         if (teclas[KeyEvent.VK_RIGHT] && !escada && !caindo) {
             p.x1 += VELOCIDADE;
             direcao = DIREITA;
+            andando = true;
             frame = (frame + 1) % 2;
         }
 
@@ -263,7 +265,7 @@ public class Mario extends JPanel implements KeyListener {
         }
 
         // Desníveis (subidas/descidas)
-        if (pontosDesnivel.contains(p.x1)) {
+        if (pontosDesnivel.contains(p.x1) && andando) {
             if (nivel % 2 == 0) {
                 if (direcao == DIREITA) chao -= 2;
                 else if (direcao == ESQUERDA) chao += 2;
@@ -324,6 +326,7 @@ public void keyPressed(KeyEvent e) {
 @Override
 public void keyReleased(KeyEvent e) {
     teclas[e.getKeyCode()] = false;
+    if ((e.getKeyCode() == KeyEvent.VK_LEFT) || (e.getKeyCode() == KeyEvent.VK_RIGHT)) andando = false;
     movimentos();
     spritenum=2;
     repaint();
