@@ -40,8 +40,8 @@ public class Mario extends JPanel implements KeyListener {
 
         proximoNivel.add(382);
         proximoNivel.add(336);
-        proximoNivel.add(276);
-        proximoNivel.add(204);
+        proximoNivel.add(272);
+        proximoNivel.add(212);
         proximoNivel.add(154);
         proximoNivel.add(94);
         proximoNivel.add(40);
@@ -100,8 +100,8 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(422);
             desniveis.add(478);
 
-            for(int i =0;i<14;i++)
-                escadasBoas.add(i+439);
+            for(int i =0;i<10;i++)
+                escadasBoas.add(i+443);
         } else if (nivel == 1 || nivel == 3) {
             desniveis.add(444);
             desniveis.add(388);
@@ -115,8 +115,8 @@ public class Mario extends JPanel implements KeyListener {
             for(int i =0;i<14;i++)
                 escadasBoas.add(i+81);
             if(nivel == 1){
-                for(int i =0;i<14;i++)
-                escadasBoas.add(i+219);
+                for(int i =0;i<9;i++)
+                escadasBoas.add(i+224);
             }
             if(nivel ==3){
                 for(int i =0;i<14;i++)
@@ -132,18 +132,18 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(424);
             desniveis.add(478);
 
-            for(int i =0;i<14;i++)
-                escadasBoas.add(i+439);
+            for(int i =0;i<10;i++)
+                escadasBoas.add(i+443);
             if(nivel ==2){
-                for(int i =0;i<14;i++)
-                escadasBoas.add(i+257);
+                for(int i =0;i<5;i++)
+                escadasBoas.add(i+250);
             }
         } else if (nivel == 5) {
             desniveis.add(276);
             desniveis.add(388);
 
-            for(int i =0;i<14;i++)
-                escadasBoas.add(i+301);
+            for(int i =0;i<12;i += 4)
+                escadasBoas.add(i+302);
         }
     }
     public boolean buraco(){
@@ -182,6 +182,7 @@ public class Mario extends JPanel implements KeyListener {
     }
 
     public void movimentos() {
+        System.out.println(nivel);
         spritecounter++;
         if(spritecounter>3){
             if(spritenum==1)
@@ -203,6 +204,7 @@ public class Mario extends JPanel implements KeyListener {
 
         // Subir escada
         if (escadasBoas.contains(p.x1)) {
+            
             if (teclas[KeyEvent.VK_UP]) {
                 escada = true;
                 direcao = ESCADA;

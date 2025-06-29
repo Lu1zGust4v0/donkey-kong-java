@@ -351,7 +351,7 @@ protected void paintComponent(Graphics g){
     for (Barril b : barris){
         b.desenhar(g);
         Rectangle brect = new Rectangle((int)b.dx+10, (int)b.dy+10, 1, 1);
-        Rectangle marioRectangle = jumpMan.getBounds();
+        Rectangle marioRectangle = new Rectangle(jumpMan.p.x1, jumpMan.p.x2, 35, 35);
         Rectangle fire = new Rectangle((int)foguinho.dx+10, (int)foguinho.dy+10, 10,10);
         Rectangle blue = new Rectangle((int)dx_azul+10, (int)dy_azul+10, 25, 25);
         Rectangle prin = new Rectangle(240, 33, 50, 50);
