@@ -27,6 +27,7 @@ public class Mario extends JPanel implements KeyListener {
     static final int VELOCIDADE = 2;
     int spritenum =1;
     int spritecounter = 0;
+    boolean puloliberado = true;
 
     boolean[] teclas = new boolean[256];
 
@@ -320,7 +321,8 @@ public class Mario extends JPanel implements KeyListener {
   @Override
 public void keyPressed(KeyEvent e) {
     teclas[e.getKeyCode()] = true;
-    if (e.getKeyCode() == KeyEvent.VK_SPACE && !pulando && !escada) {
+    if (e.getKeyCode() == KeyEvent.VK_SPACE && !pulando && !escada && puloliberado) {
+        puloliberado = false;
         pulo();
     }
     movimentos();
@@ -330,6 +332,8 @@ public void keyPressed(KeyEvent e) {
 public void keyReleased(KeyEvent e) {
     teclas[e.getKeyCode()] = false;
     if ((e.getKeyCode() == KeyEvent.VK_LEFT) || (e.getKeyCode() == KeyEvent.VK_RIGHT)) andando = false;
+    if (e.getKeyCode() == KeyEvent.VK_SPACE)
+        puloliberado = true;
     movimentos();
     spritenum=2;
     repaint();

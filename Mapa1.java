@@ -364,14 +364,14 @@ protected void paintComponent(Graphics g){
         }
         
         if (marioRectangle.intersects(blue)){
-            System.out.println("O barril blue encostou no mario");
+            System.out.println("O barril blueeee encostou no mario");
             sound1.setFile(2);
             sound1.play();
             Mapa1.troca();
             return;
         }
         if(marioRectangle.intersects(fire)){
-            System.out.println("encontou no fogo");
+            System.out.println("encontou no fogoooo");
             sound1.setFile(2);
             sound1.play();
             Mapa1.troca();
