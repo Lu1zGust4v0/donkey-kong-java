@@ -46,7 +46,6 @@ public class Mapa1 extends JFrame implements MouseListener {
     }
     public void fim(){
         stopMusic();
-        playMusic(4);
         win = new Win();
         remove(imagens);
         add(win);
@@ -355,7 +354,7 @@ protected void paintComponent(Graphics g){
         Rectangle fire = new Rectangle((int)foguinho.dx+10, (int)foguinho.dy+10, 10,10);
         Rectangle blue = new Rectangle((int)dx_azul+10, (int)dy_azul+10, 25, 25);
         Rectangle prin = new Rectangle(240, 33, 50, 50);
-
+/* 
         if (marioRectangle.intersects(brect)){
             System.out.println("O barril encostou no mario");
             sound1.setFile(2);
@@ -363,6 +362,7 @@ protected void paintComponent(Graphics g){
             Mapa1.troca();
             return;
         }
+        */
         if (marioRectangle.intersects(blue)){
             System.out.println("O barril blue encostou no mario");
             sound1.setFile(2);
@@ -378,8 +378,8 @@ protected void paintComponent(Graphics g){
             return;
         }
     if(marioRectangle.intersects(prin)){
-        sound1.setFile(3);
-        sound1.play();
+        //sound1.setFile(3);
+        //sound1.play();
         Mapa1.fim();
         return;
     }

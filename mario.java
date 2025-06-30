@@ -147,9 +147,9 @@ public class Mario extends JPanel implements KeyListener {
         }
     }
     public boolean buraco(){
-        if ((p.x1 >= 494) && (nivel==1 || nivel ==3)) return true;
-        if ((p.x1 <= 36) && (p.x2 == 274 || p.x2 == 172)) return true;
-        if ((p.x1 >= 330) && p.x2 == 58) return true;
+        if ((p.x1 >= 494) && (nivel==1 || nivel ==3||nivel ==5)) return true;
+        if ((p.x1 <= 36) && (nivel ==2 || nivel ==4)) return true;
+        if ((p.x1 >= 315) && nivel==6) return true;
     return false;
     }
 
@@ -167,7 +167,7 @@ public class Mario extends JPanel implements KeyListener {
 
         SwingUtilities.invokeLater(() -> requestFocusInWindow());
         new Thread(()->{
-            while ((p.x2 - posInicial) < 42){
+            while ((p.x2 - posInicial) < 49){
                 p.x2 += gravidade;
                 try {
                     Thread.sleep(100);
@@ -178,9 +178,7 @@ public class Mario extends JPanel implements KeyListener {
             caindo = false;
             chao = p.x2;
         }).start();
-        //excluirdesniveis();
     }
-
     public void movimentos() {
         //System.out.println(nivel);
         spritecounter++;
@@ -212,18 +210,20 @@ public class Mario extends JPanel implements KeyListener {
                 direcao = ESCADA;
                 p.x2 -= VELOCIDADE;
                 frame = (frame + 1) % 2;
-                if (proximoNivel.contains(p.x2)) {
-                    escada = false;
-                    if(nivel%2==0)
-                        direcao = ESQUERDA;
-                    else
-                        direcao = DIREITA;
-                    p.x1 += 2;
-                    p.x2 -= 2;
-                    chao = p.x2;
+                for (int y : proximoNivel) {
+                    if (Math.abs(p.x2 - y) <= 2) {
+                        escada = false;
+                        if(nivel%2==0)
+                            direcao = ESQUERDA;
+                        else
+                            direcao = DIREITA;
+                        p.x1 += 2;
+                        p.x2 -= 2;
+                        chao = p.x2;
                 }
             }
         }
+    }
         //descer escada
         if (escadasBoas.contains(p.x1)) {
             if (teclas[KeyEvent.VK_DOWN]) {
@@ -263,6 +263,9 @@ public class Mario extends JPanel implements KeyListener {
             nivel = 5;
             addArray(pontosDesnivel);
         }
+        else if(p.x2 >=35&& !escada)
+            nivel = 6;
+        
 
         // Desníveis (subidas/descidas)
         if (pontosDesnivel.contains(p.x1) && andando) {
