@@ -1,3 +1,11 @@
+// Trabalho Programação Orientada a Objetos
+// Jogo: Donkey Kong
+// Integrantes do grupo:
+//  Julio Cesar Silva de Sousa - 241024617
+//  Luiz Gustavo Nogueira Carvalho - 241025401
+//  Thiago Toreto Damaceno de Souza - 241026164
+
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
