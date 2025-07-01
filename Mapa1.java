@@ -62,8 +62,9 @@ public class Mapa1 extends JFrame implements MouseListener {
             System.out.println("x:"+e.getX()+"y:"+e.getY());
         // Ajuste as coordenadas conforme a posição dos botões no painel Inicio
 
-            Rectangle playArea = new Rectangle(220, 235, 120, 20);
-            Rectangle exitArea = new Rectangle(220, 285, 120, 20);
+            Rectangle playArea = new Rectangle(220, 235, 120, 40);
+
+            Rectangle exitArea = new Rectangle(220, 285, 120, 40);
 
             if (exitArea.contains(x, y)) {
                 System.exit(0);
@@ -78,8 +79,9 @@ public class Mapa1 extends JFrame implements MouseListener {
             }
         }
         else if(e.getSource() == perdeu){
-            Rectangle playArea = new Rectangle(270, 230, 230, 22);
-            Rectangle exitArea = new Rectangle(326, 310, 120, 30);
+            Rectangle playArea = new Rectangle(265, 230, 235, 42);
+            Rectangle exitArea = new Rectangle(320, 310, 120, 42);
+
 
             if(exitArea.contains(x, y)){
                 System.exit(0);
@@ -212,14 +214,7 @@ class Imagens extends JPanel implements Runnable{
                                         try {
                                             Thread.sleep(50);
                                         } catch (Exception e) {}
-                                    }/* 
-                                    SwingUtilities.invokeLater(() -> {
-                                        System.out.println("passou");
-                                        sound1.setFile(2);
-                                        sound1.play();
-                                        Mapa1.troca();
-                                        
-                                    });*/
+                                    }
                                 }).start();
                             }
                     jumpMan.movimentos();
