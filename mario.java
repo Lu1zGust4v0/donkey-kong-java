@@ -24,11 +24,14 @@ public class Mario extends JPanel implements KeyListener {
     int direcao, frame, chao = 390, nivel = 0;
     int alturaPulo = 28, gravidade = 7;
     BufferedImage[][] sprites;
-    static final int VELOCIDADE = 2;
+    static final float VELOCIDADE = 1;
     int spritenum =1;
     int spritecounter = 0;
     boolean puloliberado = true;
-
+    long ultimoframe = System.currentTimeMillis();
+    private long lastTime = System.nanoTime();
+    private double deltaTime = 0;
+    private final double NS_PER_UPDATE = 1000000000.0 / 60.0; // 60 updates por segundo
     boolean[] teclas = new boolean[256];
 
     Mario(int x, int y) throws IOException {
@@ -181,15 +184,13 @@ public class Mario extends JPanel implements KeyListener {
         }).start();
     }
     public void movimentos() {
-        //System.out.println(nivel);
-        spritecounter++;
-        if(spritecounter>3){
-            if(spritenum==1)
-                spritenum =2;
-            else
-                spritenum =1;
-            spritecounter = 0;
-        }
+        long agora = System.currentTimeMillis();
+        if ((andando || escada) && agora - ultimoframe >= 150) { // troca só se estiver se movendo
+            spritenum = (spritenum == 1) ? 2 : 1;
+            ultimoframe = agora;
+}
+
+
         if (teclas[KeyEvent.VK_LEFT] && !escada && !caindo) {
             p.x1 -= VELOCIDADE;
             direcao = ESQUERDA;
@@ -288,6 +289,10 @@ public class Mario extends JPanel implements KeyListener {
 
         setBounds(p.x1, p.x2, 48, 48);
         repaint();
+        if (!andando && !escada && !pulando && !caindo) {
+            spritenum = 1;
+}
+
     }
 
     public void pulo() {
@@ -335,9 +340,6 @@ public void keyReleased(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_SPACE)
         puloliberado = true;
     movimentos();
-    spritenum=2;
-    repaint();
-    spritenum =1;
 }
 
 @Override

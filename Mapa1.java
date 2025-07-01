@@ -222,15 +222,10 @@ class Imagens extends JPanel implements Runnable{
                                     });*/
                                 }).start();
                             }
-
-
                     jumpMan.movimentos();
-                    jumpMan.pulo();
-                    
-                    
                     repaint();
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(16);
                     } catch (Exception e) {}
                 }
             }).start();
