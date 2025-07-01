@@ -196,7 +196,7 @@ class Imagens extends JPanel implements Runnable{
             princess = javax.imageio.ImageIO.read(new java.io.File("sprites/princess.png"));
             mario = javax.imageio.ImageIO.read(new java.io.File("sprites/m1.png"));
             
-            jumpMan = new Mario(108, 387);
+            jumpMan = new Mario(92, 387);
             setLayout(null);
             jumpMan.setBounds(jumpMan.p.x1, jumpMan.p.x2, 20,20);
             add(jumpMan);
