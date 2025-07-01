@@ -171,7 +171,7 @@ public class Mario extends JPanel implements KeyListener {
 
         SwingUtilities.invokeLater(() -> requestFocusInWindow());
         new Thread(()->{
-            while ((p.x2 - posInicial) < 49){
+            while ((p.x2 - posInicial) < 37){
                 p.x2 += gravidade;
                 try {
                     Thread.sleep(100);
@@ -220,7 +220,7 @@ public class Mario extends JPanel implements KeyListener {
                         else
                             direcao = DIREITA;
                         
-                        if ((p.x1 >= 224 && p.x1 < 234) || (p.x1 >= 250 && p.x1 < 254) || (p.x1 >= 191 && p.x1 < 205)) p.x2 -= 6;
+                        if ((p.x1 >= 212 && p.x1 < 230) || (p.x1 >= 240 && p.x1 < 258) || (p.x1 >= 185 && p.x1 < 203)) p.x2 -= 6;
 
                         p.x1 += 2;
                         p.x2 -= 2;
