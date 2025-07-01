@@ -149,7 +149,7 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(276);
             desniveis.add(388);
 
-            for(int i =0;i<18;i++)
+            for(int i =0;i<18;i +=3)
                 escadasBoas.add(i+295);
         }
     }
