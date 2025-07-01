@@ -15,6 +15,7 @@ public class Mario extends JPanel implements KeyListener {
     public static final int ESQUERDA = 1;
     public static final int ESCADA = 2;
 
+    // Adicionar pontos específicos (desnível, escadas e o próximo nível)
     ArrayList<Integer> pontosDesnivel = new ArrayList<>();
     ArrayList<Integer> escadasBoas = new ArrayList<>();
     ArrayList<Integer> proximoNivel = new ArrayList<>();
@@ -35,7 +36,7 @@ public class Mario extends JPanel implements KeyListener {
     boolean[] teclas = new boolean[256];
     private long ultimoMovimento = System.currentTimeMillis();
 
-
+    // Construtor
     Mario(int x, int y) throws IOException {
         setFocusable(true);
         //setOpaque(false);
@@ -43,7 +44,8 @@ public class Mario extends JPanel implements KeyListener {
         p = new Ponto(x, y);
         setSize(30, 30);
         addArray(pontosDesnivel);
-
+        
+        // Adicionar no próximo nível
         proximoNivel.add(382);
         proximoNivel.add(336);
         proximoNivel.add(272);
@@ -96,6 +98,7 @@ public class Mario extends JPanel implements KeyListener {
      g.drawImage(image, 0, 0, getWidth(),getHeight(),null);
 }
 
+    // Adiciona, dependendo do nível, pontos de desnível e as escadas de cada nível
     public void addArray(ArrayList<Integer> desniveis) {
         desniveis.clear();
         escadasBoas.clear();
@@ -153,6 +156,8 @@ public class Mario extends JPanel implements KeyListener {
                 escadasBoas.add(i+295);
         }
     }
+
+    // Função que verifica buraco ou limites da plataforma
     public boolean buraco(){
         if ((p.x1 >= 494) && (nivel==1 || nivel ==3||nivel ==5)) return true;
         if ((p.x1 <= 36) && (nivel ==2 || nivel ==4)) return true;
@@ -160,6 +165,7 @@ public class Mario extends JPanel implements KeyListener {
     return false;
     }
 
+    // Excluir desníveis
     public void excluirdesniveis(){
         if(nivel ==0){
             for(int i=6;i<13;i++)
@@ -168,6 +174,7 @@ public class Mario extends JPanel implements KeyListener {
 
     }
     
+    // Quando o personagem chega num abismo, dispara uma Thread que faz o personagem cair, alterando o y do personagem
     public void cair(){
         caindo = true;
         int posInicial = p.x2;
@@ -186,21 +193,25 @@ public class Mario extends JPanel implements KeyListener {
             chao = p.x2;
         }).start();
     }
+
+    // Função para fazer o mario se movimentar, subir e descer escadas
     public void movimentos() {
         long agora = System.currentTimeMillis();
 
         if ((andando || escada) && agora - ultimoframe >= 150) { // troca só se estiver se movendo
             spritenum = (spritenum == 1) ? 2 : 1;
             ultimoframe = agora;
-}
+        }
 
-
+        // Caso o mario esteja fora da escada e não esteja caindo, se movimenta para esquerda
         if (teclas[KeyEvent.VK_LEFT] && !escada && !caindo) {
             p.x1 -= VELOCIDADE;
             direcao = ESQUERDA;
             andando = true;
             frame = (frame + 1) % 2;
         }
+
+        // Caso o mario esteja fora da escada e não esteja caindo, se movimenta para direita
         if (teclas[KeyEvent.VK_RIGHT] && !escada && !caindo) {
             p.x1 += VELOCIDADE;
             direcao = DIREITA;
@@ -294,6 +305,7 @@ public class Mario extends JPanel implements KeyListener {
         if (p.x2 < 0) p.x2 = 0;
         if (p.x2 > 410) p.x2 = 410;
 
+        // Redesenhar os sprites do Mario
         setBounds(p.x1, p.x2, 48, 48);
         repaint();
         if (!andando && !escada && !pulando && !caindo) {
@@ -302,6 +314,8 @@ public class Mario extends JPanel implements KeyListener {
 
     }
 
+
+    // Quando pressiona os espaço, dispara uma thread que faz com que a posição y do Mario mude até uma altura máxima e depois volta para o chão
     public void pulo() {
         if (teclas[KeyEvent.VK_SPACE] && !escada && !caindo) {
             pulando = true;
@@ -330,6 +344,7 @@ public class Mario extends JPanel implements KeyListener {
         }
     }
 
+    // Sobrescrita das funções de KeyListener
   @Override
 public void keyPressed(KeyEvent e) {
     teclas[e.getKeyCode()] = true;
@@ -353,7 +368,7 @@ public void keyReleased(KeyEvent e) {
 public void keyTyped(KeyEvent e) {
 }
 
-
+    // Função interna para capturar a posição do Mario na tela
     class Ponto {
         int x1, x2;
         Ponto(int x, int y) {
