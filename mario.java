@@ -33,6 +33,8 @@ public class Mario extends JPanel implements KeyListener {
     private double deltaTime = 0;
     private final double NS_PER_UPDATE = 1000000000.0 / 60.0; // 60 updates por segundo
     boolean[] teclas = new boolean[256];
+    private long ultimoMovimento = System.currentTimeMillis();
+
 
     Mario(int x, int y) throws IOException {
         setFocusable(true);
@@ -62,6 +64,7 @@ public class Mario extends JPanel implements KeyListener {
         sprites[2][1] = ImageIO.read(new File("sprites/m6.png"));
         setOpaque(false);
         addKeyListener(this);
+        
     }
     @Override
      protected void paintComponent(Graphics g){
@@ -185,6 +188,7 @@ public class Mario extends JPanel implements KeyListener {
     }
     public void movimentos() {
         long agora = System.currentTimeMillis();
+
         if ((andando || escada) && agora - ultimoframe >= 150) { // troca só se estiver se movendo
             spritenum = (spritenum == 1) ? 2 : 1;
             ultimoframe = agora;
