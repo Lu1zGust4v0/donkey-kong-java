@@ -104,8 +104,8 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(422);
             desniveis.add(478);
 
-            for(int i =0;i<10;i++)
-                escadasBoas.add(i+443);
+            for(int i =0;i<15;i++)
+                escadasBoas.add(i+435); 
         } else if (nivel == 1 || nivel == 3) {
             desniveis.add(444);
             desniveis.add(388);
@@ -116,15 +116,15 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(112);
             desniveis.add(56);
 
-            for(int i =0;i<14;i++)
-                escadasBoas.add(i+81);
+            for(int i =0;i<18;i++)
+                escadasBoas.add(i+75);
             if(nivel == 1){
-                for(int i =0;i<9;i++)
-                escadasBoas.add(i+224);
+                for(int i =0;i<18;i++)
+                escadasBoas.add(i+212);
             }
             if(nivel ==3){
-                for(int i =0;i<14;i++)
-                escadasBoas.add(i+191);
+                for(int i =0;i<18;i++)
+                escadasBoas.add(i+185);
             }
         } else if (nivel == 2 || nivel == 4) {
             desniveis.add(90);
@@ -136,18 +136,18 @@ public class Mario extends JPanel implements KeyListener {
             desniveis.add(424);
             desniveis.add(478);
 
-            for(int i =0;i<10;i++)
-                escadasBoas.add(i+443);
+            for(int i =0;i<18;i++)
+                escadasBoas.add(i+435);
             if(nivel ==2){
-                for(int i =0;i<5;i++)
-                escadasBoas.add(i+250);
+                for(int i =0;i<18;i++)
+                escadasBoas.add(i+240);
             }
         } else if (nivel == 5) {
             desniveis.add(276);
             desniveis.add(388);
 
-            for(int i =0;i<12;i += 4)
-                escadasBoas.add(i+302);
+            for(int i =0;i<18;i++)
+                escadasBoas.add(i+295);
         }
     }
     public boolean buraco(){

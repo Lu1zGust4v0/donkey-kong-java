@@ -19,7 +19,7 @@ public class Foguinho {
         escadasPorNivel.put(1, new double[] {224, 85});
         escadasPorNivel.put(2, new double[] {169, 251, 444});
         escadasPorNivel.put(3, new double[] {388, 194, 84});
-        escadasPorNivel.put(4, new double[] {225, 4440});
+        escadasPorNivel.put(4, new double[] {225, 444});
     }
 
     double[] alturasPlataformasEsc = {330, 340, 274, 280, 210, 212, 219, 147, 154, 158, 93, 99};
