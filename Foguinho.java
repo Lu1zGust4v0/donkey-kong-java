@@ -20,6 +20,7 @@ public class Foguinho {
     boolean decidiuSubirEscada = false;
     boolean vaiSubirEscada = false;
 
+    // Map para associar o nivel da plataforma com as escadas da plataforma
     static Map<Integer, double[]> escadasPorNivel = new HashMap<>();
     static {
         escadasPorNivel.put(0, new double[] {196, 444});
@@ -29,8 +30,10 @@ public class Foguinho {
         escadasPorNivel.put(4, new double[] {225, 444});
     }
 
+    // altura do topo de cada escada
     double[] alturasPlataformasEsc = {330, 340, 274, 280, 210, 212, 219, 147, 154, 158, 93, 99};
 
+    // Construtor
     Foguinho(Image[] foguinhoImagem, int f, double dx, double dy, Image[] foguinhoImagemEsq){
         this.foguinhoImagem = foguinhoImagem;
         this.f = f;
@@ -41,6 +44,7 @@ public class Foguinho {
         this.ultimoTrocaDirecao = System.currentTimeMillis();
     }
 
+    // método para atualizar o estado do foguinho
     void atualizarF(){
         f = (f + 1) % 2;
         long agora = System.currentTimeMillis();
@@ -101,12 +105,12 @@ public class Foguinho {
             }
         }
 
-        dy = yBase + Math.sin(dx / 5) * 3;
+        dy = yBase + Math.sin(dx / 5) * 3; // pulo do foguinho
 
         if (subirEscada()) {
             if (!decidiuSubirEscada) {
                 decidiuSubirEscada = true;
-                vaiSubirEscada = Math.random() < 0.1;
+                vaiSubirEscada = Math.random() < 0.1; // 10% de chance de subir escada
             }
             if (vaiSubirEscada) {
                 subindoEscada = true;
@@ -117,6 +121,7 @@ public class Foguinho {
         }
     }
 
+    // verifica se o foguinho está na posição de alguma escada
     boolean subirEscada() {
         double[] escadas = escadasPorNivel.getOrDefault(nivelPlataforma, new double[0]);
         for (double escadaX : escadas) {
@@ -130,6 +135,7 @@ public class Foguinho {
         return false;
     }
 
+    // método para encontrar qual escada o foguinho está subindo
     int encontrarEscada() {
         double[] escadas = escadasPorNivel.getOrDefault(nivelPlataforma, new double[0]);
         int maisProxima = -1;

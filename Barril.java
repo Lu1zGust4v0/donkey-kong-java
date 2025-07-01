@@ -21,6 +21,8 @@ class Barril{
     double[] alturasPlataformas;
     Image[] imagens;
     Image[] imagemBarrilFrente;
+
+    // Map para associar o nivel da plataforma com as escadas da plataforma
     static Map<Integer, double[]> escadasPorNivel = new HashMap<>();
     static {
         escadasPorNivel.put(0, new double[] {225, 444});
@@ -30,8 +32,10 @@ class Barril{
         escadasPorNivel.put(4, new double[] {196, 444});
     }
 
+    // altura da base de cada escada
     double[] alturasPlataformasEsc = {168, 158, 230, 224, 220, 291, 288, 280, 345, 342, 406, 400};
 
+    // Construtor
     Barril(double dx, double dy, boolean direita, double[] alturasPlataformas, Image[] imagens, Image[] imagemBarrilFrente) {
         this.dx = dx;
         this.dy = dy;
@@ -44,7 +48,9 @@ class Barril{
         this.imagemBarrilFrente = imagemBarrilFrente;
     }
 
+    // método para atualizar o estado do barril
     void atualizar() {
+        // controla a animação do barril
         if(!vaiDescerEscada)
             j = (j + 1) % 4;
         else
@@ -54,6 +60,7 @@ class Barril{
             dy += 4;
             int escadaAtual = encontrarEscada();
 
+            // verifica se chegou na base da escada que está descendo
             if (nivelPlataforma < alturasPlataformas.length && dy >= alturasPlataformasEsc[escadaAtual]) {
                 descendoEscada = false;
                 decidiuDescerEscada = false;
@@ -69,6 +76,7 @@ class Barril{
             }
             return;
         }
+        // caindo pela beirada
         if (caindo) {
             dy += 5;
             if (nivelPlataforma % 2 == 0) {
@@ -80,7 +88,9 @@ class Barril{
                 caindo = false;
                 nivelPlataforma++;
             }
-        } else{
+        } 
+        // andando sobre a plataforma
+        else{ 
             if (direita) {
                 dx += 5;
                 dy += 0.16;
@@ -98,11 +108,11 @@ class Barril{
                 }
             }
         }
-
+        //verifica se vai descer pela escada
         if (descerEscada()) {
             if (!decidiuDescerEscada) {
                 decidiuDescerEscada = true;
-                vaiDescerEscada = Math.random() < 0.4;
+                vaiDescerEscada = Math.random() < 0.4; // 40% de chance de descer
             }
             if (vaiDescerEscada) {
                 descendoEscada = true;
@@ -114,6 +124,7 @@ class Barril{
         
     }
 
+    // verifica se o barril está na posição de alguma escada
     boolean descerEscada() {
         double[] escadas = escadasPorNivel.getOrDefault(nivelPlataforma, new double[0]);
         for (double escadaX : escadas) {
@@ -124,6 +135,7 @@ class Barril{
         return false;
     }
 
+    // método para encontrar qual escada o barril está descendo
     int encontrarEscada() {
         double[] escadas = escadasPorNivel.getOrDefault(nivelPlataforma, new double[0]);
         int maisProxima = -1;
