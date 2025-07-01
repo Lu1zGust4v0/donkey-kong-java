@@ -219,6 +219,9 @@ public class Mario extends JPanel implements KeyListener {
                             direcao = ESQUERDA;
                         else
                             direcao = DIREITA;
+                        
+                        if ((p.x1 >= 224 && p.x1 < 234) || (p.x1 >= 250 && p.x1 < 254) || (p.x1 >= 191 && p.x1 < 205)) p.x2 -= 6;
+
                         p.x1 += 2;
                         p.x2 -= 2;
                         chao = p.x2;
